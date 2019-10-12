@@ -27,12 +27,18 @@ install-exec-hook: libpippi.so
 
 libpippi_public_h_headers = \
 	pipdebug.h              \
+	PipString               \
+	pipstring.h             \
+	PipConfigParser         \
+	pipconfigparser.h       \
 	PipRelay                \
 	piprelay.h
 
 libpippi_a_SOURCES =              \
     $(libpippi_public_h_headers)  \
 	pipdebug.cpp                  \
+	pipstring.cpp                 \
+	pipconfigparser.cpp           \
 	piprelay.cpp
 
 libpippidir = $(includedir)/pippi

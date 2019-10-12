@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include "PipConfigParser"
 #include "PipRelay"
 
 #define DEBUG
@@ -108,6 +109,16 @@ int main(
         int argc,
         char *argv[])
 {
+    PipConfigParser config;
+    PipString       theConfigString;
+
+    theConfigString =
+"[gpio14]\n"
+"  type = 'relay'\n"
+"";
+
+    config.parse(theConfigString);
+
     printHeader();
 
     if (gpioInitialise() < 0)

@@ -186,7 +186,7 @@ pip_print_message (
 /**
  * A macro to print booleans.
  */
-#define PIP_BOOL(_boolval) ((_boolval ? "true" : "false"))
+#define STR_BOOL(_boolval) ((_boolval ? "true" : "false"))
 #define STR(_stringval) ((_stringval).c_str())
 #endif
 

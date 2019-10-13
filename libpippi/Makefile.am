@@ -27,6 +27,10 @@ install-exec-hook: libpippi.so
 
 libpippi_public_h_headers = \
 	pipdebug.h              \
+	PipMap                  \
+	pipmap.h                \
+	PipVector               \
+	pipvector.h             \
 	PipString               \
 	pipstring.h             \
 	PipConfigParser         \

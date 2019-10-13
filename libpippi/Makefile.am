@@ -25,23 +25,30 @@ install-exec-hook: libpippi.so
 	-@echo " $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) libpippi.so '$(DESTDIR)$(libdir)'"
 	$(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) libpippi.so "$(DESTDIR)$(libdir)"
 
-libpippi_public_h_headers = \
-	pipdebug.h              \
-	PipMap                  \
-	pipmap.h                \
-	PipVector               \
-	pipvector.h             \
-	PipString               \
-	pipstring.h             \
-	PipConfigParser         \
-	pipconfigparser.h       \
-	PipRelay                \
+libpippi_public_h_headers =       \
+	pipdebug.h                    \
+	PipTypes                      \
+	piptypes.h                    \
+	PipVariant                    \
+	pipvariant.h                  \
+	PipMap                        \
+	pipmap.h                      \
+	PipVector                     \
+	pipvector.h                   \
+	PipString                     \
+	pipstring.h                   \
+	PipConfigParser               \
+	pipconfigparser.h             \
+	PipRelay                      \
 	piprelay.h
 
 libpippi_a_SOURCES =              \
     $(libpippi_public_h_headers)  \
 	pipdebug.cpp                  \
 	pipstring.cpp                 \
+	pipvariant_p.h                \
+	pipvariant_p.cpp              \
+	pipvariant.cpp                \
 	pipconfigparser.cpp           \
 	piprelay.cpp
 

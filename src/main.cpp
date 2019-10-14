@@ -1,5 +1,3 @@
-#include <pigpio.h>
-
 #include <unistd.h>
 #include <stdio.h>
 
@@ -121,11 +119,13 @@ int main(
 
     printHeader();
 
+#if 0
     if (gpioInitialise() < 0)
     {
         PIP_WARNING(stderr, "pigpio initialisation failed");
         return 1;
     }
+#endif
 
     PIP_DEBUG("Start");
 #if 1
@@ -135,6 +135,8 @@ int main(
     sleep(1);
     relay.off();
 #endif
+
+#if 0
     int pin = 4;
 
     //gpioSetMode(pin, PI_OUTPUT);
@@ -153,7 +155,7 @@ int main(
 
         gpioDelay(180 * 1000);
     }
-
+#endif
 
     return 0;
 }

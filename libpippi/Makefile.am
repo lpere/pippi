@@ -9,10 +9,17 @@ AM_CPPFLAGS  = \
 	-std=c++11 \
 	-fPIC -pipe
 
+MYLIBS = -lrt 
+
+if HAVE_PIGPIO
+AM_CPPFLAGS += -DHAVE_PIGPIO
+MYLIBS += -lpigpio
+endif
+
 libpippi.so: libpippi.a $(libpippi_a_OBJECTS)
 	@echo "  CXXLD    $@"
 	$(CXX) -shared -pthread \
-		-lpigpio -lrt \
+		$(MYLIBS) \
 		-Wl,--whole-archive \
 		libpippi.a \
 		-Wl,--no-whole-archive \

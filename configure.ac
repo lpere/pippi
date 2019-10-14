@@ -25,8 +25,10 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([strdup strtol strcmp strncmp])
 
 # Checking for dependency libraries.
-AC_CHECK_HEADERS([pigpio.h],,AC_MSG_ERROR("Pigpio header was not found."))
-AC_CHECK_LIB(pigpio,gpioSetMode,,AC_MSG_ERROR([Pigpio library was not found.]))
+AC_CHECK_HEADERS([pigpio.h],have_pigpio="yes",have_pigpio="no")
+#AC_CHECK_LIB(pigpio,gpioSetMode,,AC_MSG_ERROR([Pigpio library was not found.]))
+AM_CONDITIONAL(HAVE_PIGPIO, [test "$have_pigpio" = "yes"])
+
 
 #
 # Creating the makefiles.

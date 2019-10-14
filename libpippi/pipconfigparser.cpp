@@ -1,10 +1,32 @@
 #include "pipconfigparser.h"
 
-#define DEBUG
+//#define DEBUG
 //#define WARNING
 #include "pipdebug.h"
 
-        
+
+PipConfigParser::PipConfigParser() :
+    PipObject("PipConfigParser")
+{
+}
+
+PipConfigParser::~PipConfigParser()
+{
+}
+
+/**
+ * \returns A "sectionless" value from the configuration by its key (name).
+ */
+PipVariant
+PipConfigParser::configValue(
+        const PipString &key) const
+{
+    if (m_valuesNoSection.contains(key))
+        return m_valuesNoSection.at(key);
+
+    return PipVariant();
+}
+
 bool 
 PipConfigParser::parse(
         const PipString &input)
@@ -25,9 +47,13 @@ PipConfigParser::parse(
         const PipString &input,
         size_t          &location)
 {
+    PipString sectionName;
+
     for (;;)
     {
-        size_t oldLocation = location;
+        size_t     oldLocation = location;
+        PipString  key;
+        PipVariant value;
 
         parseWhiteSpace(input, location);
 
@@ -37,8 +63,11 @@ PipConfigParser::parse(
             return true;
         }
 
-        if (!parseSectionName(input, location))
-            parseConfigItem(input, location);
+        if (parseSectionName(input, location, sectionName))
+            continue;
+
+        if (parseAssignment(input, location, key, value))
+            m_valuesNoSection[key] = value;
 
         if (location == oldLocation)
         {
@@ -87,31 +116,15 @@ PipConfigParser::parseEof(
     return false;
 }
 
-
-bool 
-PipConfigParser::parseConfigItem(
-        const PipString &input,
-        size_t          &location)
-{
-    if (parseSectionName(input, location))
-        return true;
-
-    if (parseAssignment(input, location))
-        return true;
-
-    return true;
-}
-
-
-
 bool 
 PipConfigParser::parseSectionName(
         const PipString &input,
-        size_t          &location)
+        size_t          &location,
+        PipString       &sectionName)
 {
     if (input[location] == '[')
     {
-        PipString sectionName;
+        PipString mySectionName;
 
         for (;;)
         {
@@ -119,12 +132,13 @@ PipConfigParser::parseSectionName(
             ++location;
             if (input[location] == ']')
             {
+                sectionName = mySectionName;
                 PIP_DEBUG("Parsed section name '%s'.", STR(sectionName));
                 ++location;
                 return true;
             }
 
-            sectionName += input[location];
+            mySectionName += input[location];
         }
     }
 
@@ -134,11 +148,18 @@ PipConfigParser::parseSectionName(
 bool 
 PipConfigParser::parseAssignment(
         const PipString &input,
-        size_t          &location)
+        size_t          &location,
+        PipString       &key,
+        PipVariant      &value)
 {
-    if (!parseKey(input, location))
+    PipString  myKey;
+    PipVariant myValue;
+
+    // First there is a key, a name.
+    if (!parseKey(input, location, myKey))
         return false;
 
+    // Then the assignment operator.
     if (!parseAssignmentOperator(input, location))
     {
         PIP_WARNING("Error in line %d: '=' expected.", m_lineNumber);
@@ -146,7 +167,8 @@ PipConfigParser::parseAssignment(
         return false;
     }
     
-    if (!parseValue(input, location))
+    // Then a value.
+    if (!parseValue(input, location, myValue))
     {
         PIP_WARNING(
                 "Error in line %d: configuration value expected.", 
@@ -156,18 +178,21 @@ PipConfigParser::parseAssignment(
         return false;
     }
 
+    key = myKey;
+    value = myValue;
     return true;
 }
 
 bool 
 PipConfigParser::parseValue(
         const PipString &input,
-        size_t          &location)
+        size_t          &location,
+        PipVariant      &value)
 {
     parseWhiteSpace(input, location);
 
     if (input[location] == '\'')
-        return parseSingleQuotedString(input, location);
+        return parseSingleQuotedString(input, location, value);
 
     return false;
 }
@@ -175,9 +200,11 @@ PipConfigParser::parseValue(
 bool 
 PipConfigParser::parseSingleQuotedString(
         const PipString &input,
-        size_t          &location)
+        size_t          &location,
+        PipVariant      &value)
 {
-    PipString value;
+    PipString valueString;
+
     if (input[location] == '\'')
     {
         ++location;
@@ -187,11 +214,16 @@ PipConfigParser::parseSingleQuotedString(
             if (input[location] == '\'')
             {
                 ++location;
-                PIP_DEBUG("Single quoted string '%s' parsed.", STR(value));
+                value = valueString;
+
+                PIP_DEBUG(
+                        "Single quoted string '%s' parsed.", 
+                        STR(valueString));
+
                 return true;
             }
 
-            value += input[location];
+            valueString += input[location];
             ++location;
         }
     }
@@ -199,12 +231,16 @@ PipConfigParser::parseSingleQuotedString(
     return false;
 }
 
+/**
+ * 
+ */
 bool 
 PipConfigParser::parseKey(
         const PipString &input,
-        size_t          &location)
+        size_t          &location,
+        PipString       &key)
 {
-    PipString key;
+    PipString myKey;
 
     parseWhiteSpace(input, location);
 
@@ -214,11 +250,12 @@ PipConfigParser::parseKey(
 
         if (c == ' ' || c == '\t')
         {
+            key = myKey;
             PIP_DEBUG("Key '%s' parsed.", STR(key));
             return true;
         }
 
-        key += c;
+        myKey += c;
         ++location;
     }
 

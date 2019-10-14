@@ -2,7 +2,7 @@
 AC_INIT(pippi, 0.0.1)
 AC_CONFIG_SRCDIR([libpippi/pipdebug.cpp])
 AM_INIT_AUTOMAKE([subdir-objects])
-#AM_SILENT_RULES([yes])
+AM_SILENT_RULES([yes])
 
 AM_CONFIG_HEADER(config.h)
 AC_CONFIG_MACRO_DIR([m4])
@@ -36,6 +36,9 @@ AM_CONDITIONAL(HAVE_PIGPIO, [test "$have_pigpio" = "yes"])
 AC_CONFIG_FILES(Makefile                          \
                 libpippi/Makefile                 \
                 src/Makefile                      \
+                tests/Makefile                    \
+                tests/ut_pipvariant/Makefile      \
+                tests/ut_pipconfigparser/Makefile \
                )
 
 AC_OUTPUT

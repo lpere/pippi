@@ -26,9 +26,10 @@ enum PipType
 
 union PipUnion 
 {
+    bool                bVal;
+    char                cVal;
     int                 iVal;
     double              dVal;
-    bool                bVal;
     ulonglong           ullVal;
     size_t              sizeVal;
     PipString          *stringVal;

@@ -36,16 +36,20 @@ libpippi_public_h_headers =       \
 	pipdebug.h                    \
 	PipTypes                      \
 	piptypes.h                    \
-	PipVariant                    \
-	pipvariant.h                  \
-	PipVariantMap                 \
-	pipvariantmap.h               \
 	PipMap                        \
 	pipmap.h                      \
 	PipVector                     \
 	pipvector.h                   \
+	PipVariant                    \
+	pipvariant.h                  \
+	PipVariantMap                 \
+	pipvariantmap.h               \
+	PipObject                     \
+	pipobject.h                   \
 	PipString                     \
 	pipstring.h                   \
+	PipException                  \
+	pipexception.h                \
 	PipConfigParser               \
 	pipconfigparser.h             \
 	PipRelay                      \
@@ -59,6 +63,8 @@ libpippi_a_SOURCES =              \
 	pipvariant_p.cpp              \
 	pipvariant.cpp                \
 	pipvariantmap.cpp             \
+	pipobject.cpp                 \
+	pipexception.cpp              \
 	pipconfigparser.cpp           \
 	piprelay.cpp
 

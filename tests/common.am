@@ -1,0 +1,15 @@
+AM_CPPFLAGS = -Wall -Werror -fno-strict-aliasing
+AM_CPPFLAGS += -std=c++11
+AM_CPPFLAGS += -Wno-deprecated-declarations
+AM_CPPFLAGS += -I../..
+AM_CPPFLAGS += -I../../libpippi/
+AM_CPPFLAGS += -I../common
+AM_CPPFLAGS += -I../../libpippi/include/
+AM_CPPFLAGS += -pipe
+AM_CPPFLAGS += $(SIGC_CFLAGS) 
+
+LDADD = \
+	$(SIGC_LIBS) \
+    -L../../libpippi -lpippi -lrt
+
+AM_LDFLAGS = -pthread -Wl,-rpath,. -Wl,-rpath,../libpippi -Wl,-rpath,../../libpipi -Wl,-rpath,./libpippi

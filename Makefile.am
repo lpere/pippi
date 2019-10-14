@@ -3,7 +3,8 @@ ACLOCAL_AMFLAGS= -I m4
 
 SUBDIRS =       \
 	libpippi    \
-	src         
+	src         \
+	tests
 
 EXTRA_DIST =   \
 	autogen.sh 

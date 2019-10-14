@@ -19,3 +19,6 @@ missing
 *.swp
 *~
 src/pippi
+tests/common/.dirstamp
+tests/ut_pipconfigparser/ut_pipconfigparser
+tests/ut_pipvariant/ut_pipvariant

@@ -12,6 +12,12 @@ pippi_CPPFLAGS = \
 pippi_LDADD = \
 	-L../libpippi -lpippi
 
+if HAVE_PIGPIO
+pippi_CPPFLAGS += -DHAVE_PIGPIO
+pippi_LDADD+=-lpigpio
+endif
+
+
 pippi_LDFLAGS = \
 	-Wl,-rpath,. -Wl,-rpath,../libpippi -Wl,-rpath,./libpippi
 

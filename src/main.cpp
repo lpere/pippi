@@ -1,6 +1,10 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#ifdef HAVE_PIGPIO
+#  include <pigpio.h>
+#endif
+
 #include "PipConfigParser"
 #include "PipRelay"
 
@@ -119,7 +123,7 @@ int main(
 
     printHeader();
 
-#if 0
+#ifdef HAVE_PIGPIO
     if (gpioInitialise() < 0)
     {
         PIP_WARNING(stderr, "pigpio initialisation failed");
@@ -128,7 +132,7 @@ int main(
 #endif
 
     PIP_DEBUG("Start");
-#if 1
+#ifdef HAVE_PIGPIO
     //gpioSetMode(22, PI_OUTPUT);
     PipRelay relay(14);
     relay.on();
